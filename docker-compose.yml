@@ -9,44 +9,47 @@ services:
     links:
       - influxdb
 
-  telegraf_2:
-    image: telegraf:1.4.0
-    volumes:
-      - ./telegraf/conf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
-    links:
-      - influxdb
+  # telegraf_2:
+  #   image: telegraf:1.4.0
+  #   volumes:
+  #     - ./telegraf/conf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+  #   links:
+  #     - influxdb
 
-  telegraf_3:
-    image: telegraf:1.4.0
-    volumes:
-      - ./telegraf/conf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
-    links:
-      - influxdb
+  # telegraf_3:
+  #   image: telegraf:1.4.0
+  #   volumes:
+  #     - ./telegraf/conf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+  #   links:
+  #     - influxdb
 
-  telegraf_4:
-    image: telegraf:1.4.0
-    volumes:
-      - ./telegraf/conf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
-    links:
-      - influxdb
+  # telegraf_4:
+  #   image: telegraf:1.4.0
+  #   volumes:
+  #     - ./telegraf/conf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+  #   links:
+  #     - influxdb
 
-  telegraf_5:
-    image: telegraf:1.4.0
-    volumes:
-      - ./telegraf/conf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
-    links:
-      - influxdb
+  # telegraf_5:
+  #   image: telegraf:1.4.0
+  #   volumes:
+  #     - ./telegraf/conf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+  #   links:
+  #     - influxdb
 
   # Define an InfluxDB service
   influxdb:
     image: influxdb:1.3.5
     volumes:
-      - ./influxdb/data:/var/lib/influxdb
+      - ./influxdb/storage:/var/lib/influxdb
     ports:
       - "8086:8086"
+
   # Define a Chronograf service
   chronograf:
     image: chronograf:1.3.8
+    volumes:
+      - ./chronograf/storage:/var/lib/chronograf
     environment:
       INFLUXDB_URL: http://influxdb:8086
       KAPACITOR_URL: http://kapacitor:9092
@@ -55,9 +58,12 @@ services:
     links:
       - influxdb
       - kapacitor
+
   # Define a Kapacitor service
   kapacitor:
     image: kapacitor:1.3.3
+    volumes:
+      - ./kapacitor/storage:/var/lib/kapacitor
     environment:
       KAPACITOR_HOSTNAME: kapacitor
       KAPACITOR_INFLUXDB_0_URLS_0: http://influxdb:8086
@@ -65,6 +71,7 @@ services:
       - influxdb
     ports:
       - "9092:9092"
+
   # Define a service for using the influx CLI tool.
   # docker-compose run influxdb-cli
   influxdb-cli:
@@ -75,6 +82,7 @@ services:
       - influxdb
     links:
       - influxdb
+
   # Define a service for using the kapacitor CLI tool.
   # docker-compose run kapacitor-cli
   kapacitor-cli:
