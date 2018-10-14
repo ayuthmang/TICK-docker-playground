@@ -11,3 +11,8 @@ docker-compose up -d
 ```bash
 docker-compose down
 ```
+## Folder Structures
+
+| Folder | Meaning                                   |
+|--------|-------------------------------------------|
+| bin    | General scripts that make us dont do DRY. |
